@@ -1,0 +1,55 @@
+{
+  "name": "mtga-journal",
+  "version": "0.1.0",
+  "description": "Overlay for MTG Arena that locks the Play button until you journal your last game",
+  "productName": "MTGA Journal",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "demo": "electron . --demo",
+    "test": "node --test test/*.test.js",
+    "e2e": "node scripts/e2e.js",
+    "replay": "node scripts/replay.js",
+    "dist": "node scripts/make-icons.js && electron-builder --win"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^44.9.0",
+    "electron-builder": "^26.15.3"
+  },
+  "dependencies": {
+    "koffi": "^3.3.3"
+  },
+  "private": true,
+  "build": {
+    "appId": "com.mtgajournal.app",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/@koromix/koffi-*/**"
+    ],
+    "npmRebuild": false,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "createStartMenuShortcut": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "MTGA Journal"
+    }
+  }
+}

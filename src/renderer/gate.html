@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:" />
+    <title>MTGA Journal</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="gate.css" />
+  </head>
+  <body>
+    <div class="window">
+      <header class="titlebar drag">
+        <span class="brand"><span class="brand-mark" aria-hidden="true"></span><span id="title">Post-game notes</span></span>
+        <span class="queue" id="queue"></span>
+        <button class="icon-btn no-drag" id="journal" title="Open the journal" aria-label="Open the journal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2Z" /><path d="M8 7h6M8 11h6" /></svg>
+        </button>
+        <button class="icon-btn no-drag" id="hide" title="Hide for now (Play stays locked)" aria-label="Hide for now">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+        </button>
+      </header>
+      <main id="root" class="content"></main>
+    </div>
+    <script src="ui.js"></script>
+    <script src="gate.js"></script>
+  </body>
+</html>

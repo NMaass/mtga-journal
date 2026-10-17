@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:" />
+    <title>Mid-game notes</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="notepad.css" />
+  </head>
+  <body>
+    <div id="pad" class="pad">
+      <header class="pad-head drag">
+        <span class="pad-mark" aria-hidden="true"></span>
+        <span id="turn" class="pad-turn">Game starting</span>
+        <span id="opp" class="pad-opp faint"></span>
+        <button id="collapse" class="icon-btn no-drag" title="Collapse" aria-label="Collapse notepad">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14" /></svg>
+        </button>
+      </header>
+      <section class="pad-body">
+        <div id="prompt" class="pad-prompt"></div>
+        <div id="recall" class="pad-recall" hidden></div>
+        <textarea id="input" class="field pad-input" rows="2" placeholder="Jot it down — Enter to save" aria-label="Mid-game note"></textarea>
+        <div class="pad-foot">
+          <span class="faint">Enter saves · Shift+Enter new line · Esc back to game</span>
+          <button id="save" class="btn small primary" type="button">Save</button>
+        </div>
+        <ol id="history" class="pad-history"></ol>
+      </section>
+    </div>
+    <div id="pill" class="pill drag" hidden>
+      <span class="pad-mark" aria-hidden="true"></span>
+      <span id="pill-text">Notes</span>
+      <span class="no-drag pill-open" id="expand" role="button" aria-label="Expand notepad">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+      </span>
+    </div>
+    <script src="ui.js"></script>
+    <script src="notepad.js"></script>
+  </body>
+</html>

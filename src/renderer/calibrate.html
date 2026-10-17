@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+    <title>Adjust lock area</title>
+    <link rel="stylesheet" href="shared.css" />
+    <style>
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+        user-select: none;
+      }
+      .veil {
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 8, 12, 0.45);
+        cursor: crosshair;
+      }
+      .panel {
+        position: fixed;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(560px, calc(100vw - 32px));
+        padding: 16px 18px;
+        border-radius: 12px;
+        background: var(--panel);
+        border: 1px solid var(--line-2);
+        box-shadow: var(--shadow);
+        cursor: default;
+      }
+      .panel h1 {
+        margin: 0 0 4px;
+        font: 600 17px var(--font-display);
+      }
+      .panel p {
+        margin: 0 0 12px;
+        color: var(--text-2);
+      }
+      .panel .warn {
+        color: #ffc58a;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+      .box {
+        position: fixed;
+        border: 2px dashed var(--gold-2);
+        background: rgba(240, 201, 106, 0.16);
+        border-radius: 8px;
+        cursor: move;
+      }
+      .box span {
+        position: absolute;
+        left: 8px;
+        top: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--gold-2);
+        text-shadow: 0 1px 2px #000;
+      }
+      .handle {
+        position: absolute;
+        right: -7px;
+        bottom: -7px;
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        background: var(--gold-2);
+        cursor: nwse-resize;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="veil" id="veil"></div>
+    <div class="box" id="box"><span>Play-button lock</span><div class="handle" id="handle"></div></div>
+    <div class="panel" id="panel">
+      <h1>Cover MTGA’s Play button</h1>
+      <p id="help">Drag across the screen to draw a new box, drag the box to move it, or pull its corner to resize. Enter saves, Esc cancels.</p>
+      <div class="actions">
+        <button class="btn ghost" id="reset">Reset to default</button>
+        <button class="btn" id="cancel">Cancel</button>
+        <button class="btn primary" id="save">Save area</button>
+      </div>
+    </div>
+    <script src="calibrate.js"></script>
+  </body>
+</html>

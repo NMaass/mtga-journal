@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+    <title>Play locked</title>
+    <link rel="stylesheet" href="shared.css" />
+    <style>
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+        user-select: none;
+      }
+      .lock {
+        position: fixed;
+        inset: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: min(5vw, 4vh, 16px);
+        padding: 0 6%;
+        border-radius: 12px;
+        border: 2px solid var(--gold);
+        background: linear-gradient(180deg, rgba(23, 27, 35, 0.97), rgba(14, 16, 21, 0.97));
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 22px rgba(240, 201, 106, 0.28);
+        cursor: pointer;
+        animation: glow 2.4s ease-in-out infinite;
+        color: var(--text);
+      }
+      .lock:hover {
+        border-color: var(--gold-2);
+        background: linear-gradient(180deg, rgba(32, 37, 48, 0.98), rgba(18, 21, 28, 0.98));
+      }
+      @keyframes glow {
+        50% {
+          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 34px rgba(240, 201, 106, 0.45);
+        }
+      }
+      .icon {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: min(34vh, 52px);
+        height: min(34vh, 52px);
+        border-radius: 50%;
+        background: var(--gold-soft);
+        color: var(--gold-2);
+      }
+      .icon svg {
+        width: 50%;
+        height: 50%;
+      }
+      .text {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .title {
+        font: 700 clamp(13px, 17vh, 22px) / 1.15 var(--font-display);
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+      .sub {
+        margin-top: 3px;
+        font-size: clamp(10px, 10vh, 13px);
+        color: var(--text-2);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lock" id="lock" role="button" aria-label="Play is locked. Click to open the journal step that unlocks it.">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg></span>
+      <span class="text"><span class="title" id="title">Notes first</span><span class="sub" id="sub">Click to write your game notes</span></span>
+    </div>
+    <script src="blocker.js"></script>
+  </body>
+</html>

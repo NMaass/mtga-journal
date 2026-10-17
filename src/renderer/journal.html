@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:" />
+    <title>MTGA Journal</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="journal.css" />
+  </head>
+  <body>
+    <header class="titlebar drag">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>MTGA Journal</span>
+      </div>
+      <label class="search no-drag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        <input id="search" type="search" placeholder="Search notes, opponents, cards, tags…" aria-label="Search the journal" />
+      </label>
+      <div id="filter" class="no-drag"></div>
+      <button id="open-settings" class="icon-btn no-drag" title="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" /><circle cx="16" cy="6" r="2" /><circle cx="10" cy="12" r="2" /><circle cx="18" cy="18" r="2" /></svg>
+      </button>
+    </header>
+
+    <main class="page">
+      <div id="banner"></div>
+      <div id="status" class="status"></div>
+      <section id="summary" class="summary" aria-label="Summary"></section>
+      <section id="runs" class="runs" aria-label="Events"></section>
+    </main>
+
+    <aside id="settings" class="drawer" hidden aria-label="Settings"></aside>
+    <div id="scrim" class="scrim" hidden></div>
+
+    <script src="ui.js"></script>
+    <script src="journal.js"></script>
+  </body>
+</html>

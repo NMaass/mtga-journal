@@ -1,0 +1,172 @@
+html,
+body {
+  background: #12141a;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.pad {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-2);
+  border-top: 2px solid var(--gold);
+  background: linear-gradient(180deg, rgba(212, 168, 75, 0.07), transparent 80px), #12141a;
+}
+.pad.their-turn {
+  border-top-color: #6aa7f0;
+}
+.pad[hidden] {
+  display: none;
+}
+
+.pad-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 4px 0 12px;
+  flex: none;
+}
+.pad-mark {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex: none;
+}
+.their-turn .pad-mark {
+  background: #6aa7f0;
+}
+.pad-turn {
+  font-weight: 700;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.pad-opp {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.pad-head .icon-btn {
+  width: 28px;
+  height: 28px;
+}
+
+.pad-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 2px 12px 12px;
+}
+.pad-prompt {
+  font: 600 15px/1.3 var(--font-display);
+  color: var(--gold-2);
+}
+.their-turn .pad-prompt {
+  color: #a9cdf7;
+}
+.pad-recall {
+  padding: 6px 9px;
+  border-left: 2px solid var(--gold);
+  background: var(--panel);
+  border-radius: 4px;
+  font-size: 12.5px;
+  white-space: pre-wrap;
+}
+.pad-recall[hidden] {
+  display: none;
+}
+.pad-input {
+  resize: none;
+  flex: 1 1 auto;
+  min-height: 52px;
+  max-height: 140px;
+  padding: 7px 9px;
+  font-size: 13px;
+}
+.pad-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+.pad-foot .faint {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pad-history {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--line);
+  overflow-y: auto;
+  min-height: 0;
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.pad-history:empty {
+  display: none;
+}
+.pad-history li {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 7px;
+  font-size: 12.5px;
+}
+
+/* quiet until the player clicks in */
+body:not(.focused) .pad-foot .faint {
+  opacity: 0.6;
+}
+
+.pill {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 6px 0 14px;
+  border: 1px solid var(--line-2);
+  border-left: 3px solid var(--gold);
+  background: #12141a;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 12.5px;
+}
+.pill[hidden] {
+  display: none;
+}
+.pill #pill-text {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pill-open {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.pill-open:hover {
+  background: var(--panel-2);
+  color: var(--text);
+}
+.pill-open svg {
+  width: 16px;
+  height: 16px;
+}
