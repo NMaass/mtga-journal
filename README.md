@@ -35,6 +35,27 @@ queues). Each game shows its notes, tags, mid-game notes and the cards your oppo
 The app lives in the system tray. Closing the journal window keeps it running; quit from the
 tray menu.
 
+## Building an installer
+
+To run the app without `npm start`, build a Windows installer:
+
+```bash
+npm run dist
+```
+
+This writes `dist\MTGA Journal Setup <version>.exe`. It installs for the current user without
+asking for admin rights, adds Start-menu and desktop shortcuts, and starts the app when it
+finishes. Uninstall from Windows **Settings → Apps**; your journal in `Documents\MTGA Journal`
+is left alone. The installer is not code-signed, so SmartScreen may warn on first run
+(**More info → Run anyway**).
+
+- `dist\win-unpacked\MTGA Journal.exe` is the same app without installing it.
+- The development flags work on the packaged exe too, e.g. `"MTGA Journal.exe" --demo`.
+- The installed app and `npm start` are the same app to Windows: whichever starts second just
+  brings up the first one's journal window.
+- The icons in `build\` are drawn by `scripts/make-icons.js` from the same code as the tray icon
+  (`src/main/icon.js`); `npm run dist` regenerates them.
+
 ## First-run calibration
 
 - **Play-button lock:** open MTGA to its Home or an event page, then choose
