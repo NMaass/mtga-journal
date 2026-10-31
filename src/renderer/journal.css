@@ -15,6 +15,10 @@ body {
   background: var(--bg);
   flex: none;
 }
+/* macOS: traffic lights on the left instead of caption buttons on the right */
+.platform-darwin .titlebar {
+  padding: 0 16px 0 88px;
+}
 .brand {
   display: inline-flex;
   align-items: center;

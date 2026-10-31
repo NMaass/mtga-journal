@@ -510,7 +510,7 @@ function openSettings() {
       h('div', { class: 'setting stack' }, h('div', { class: 'setting-text' }, h('div', { class: 'setting-title' }, 'Quick tags'), h('div', { class: 'setting-desc faint' }, 'Comma separated. Shown as toggles on every game.')), tagsInput),
       h('h3', {}, 'App'),
       settingRow('Open the journal on startup', null, switchInput(s.openJournalOnStart, (v) => setSetting({ openJournalOnStart: v }), 'Open the journal on startup')),
-      settingRow('Start with Windows', null, switchInput(st.launchAtLogin, (v) => setSetting({ launchAtLogin: v }), 'Start with Windows')),
+      settingRow(UI.IS_MAC ? 'Open at login' : 'Start with Windows', null, switchInput(st.launchAtLogin, (v) => setSetting({ launchAtLogin: v }), UI.IS_MAC ? 'Open at login' : 'Start with Windows')),
       h('div', { class: 'setting stack' },
         h('div', { class: 'setting-text' }, h('div', { class: 'setting-title' }, 'MTGA log file'), h('div', { class: 'setting-desc faint' }, 'Changing this restarts the app.')),
         logInput,

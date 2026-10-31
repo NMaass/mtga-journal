@@ -147,6 +147,8 @@
     { key: 'sideboard', n: 4, label: 'Sideboard options', hint: 'What comes in, against what, and what goes out.', placeholder: 'vs fliers: bring in Plummet for a 2-drop…' },
   ];
 
+  const IS_MAC = window.mj?.platform === 'darwin';
+  const SAVE_HINT = IS_MAC ? '⌘ Return to save' : 'Ctrl+Enter to save';
   const errorText = (err) => String(err?.message || err).replace(/^Error invoking remote method '[^']+': (Error: )?/, '');
 
   function liveNotes(list, { title = 'Mid-game notes' } = {}) {
@@ -306,7 +308,7 @@
       h(
         'div',
         { class: 'editor-foot' },
-        h('span', { class: 'faint hint' }, 'Ctrl+Enter to save'),
+        h('span', { class: 'faint hint' }, SAVE_HINT),
         counter,
         error,
         h('span', { class: 'spacer' }),
@@ -320,6 +322,8 @@
   }
 
   window.UI = {
+    IS_MAC,
+    SAVE_HINT,
     h,
     fill,
     ICONS,

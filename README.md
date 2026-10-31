@@ -1,6 +1,6 @@
 # MTGA Journal
 
-A small Windows overlay for MTG Arena that makes you stop and think between games. It reads
+A small overlay for MTG Arena on Windows and macOS that makes you stop and think between games. It reads
 MTGA's `Player.log` and locks the **Play** button until you have written the note the moment
 calls for:
 
@@ -19,7 +19,7 @@ queues). Each game shows its notes, tags, mid-game notes and the cards your oppo
 1. In MTGA, open **Settings → Account** and turn on **Detailed Logs (Plugin Support)**, then
    restart MTGA. Without it the log has no game data.
 2. Run MTGA windowed or in borderless fullscreen. Windows can't draw anything over exclusive
-   fullscreen, so the overlays would be invisible.
+   fullscreen, so the overlays would be invisible. On a Mac, both windowed and full-screen should work.
 3. Install and start the app:
 
    ```bash
@@ -32,8 +32,24 @@ queues). Each game shows its notes, tags, mid-game notes and the cards your oppo
 
    If Electron complains that it failed to install, run `node node_modules/electron/install.js` once.
 
-The app lives in the system tray. Closing the journal window keeps it running; quit from the
-tray menu.
+The app lives in the system tray (the menu bar on a Mac). Closing the journal window keeps it
+running; quit from the tray menu.
+
+### On a Mac
+
+Same steps as above, in Terminal. You need [Node.js](https://nodejs.org) 22 or newer. Things
+that differ from Windows:
+
+- The app reads `~/Library/Logs/Wizards Of The Coast/MTGA/Player.log`.
+- Card names come from `~/Library/Application Support/com.wizards.mtga/Downloads/Raw`, or from
+  inside `MTGA.app` for older installs. If the status bar says *Card names unavailable*,
+  everything else still works.
+- The first time it saves your journal, macOS asks whether MTGA Journal may use your
+  **Documents** folder. Allow it, because that's where the journal is kept.
+- Finding the MTGA window needs no extra permissions. A windowed MTGA is assumed to have a
+  standard 28-point title bar. If the lock box or notepad sits a little high or low, redraw
+  it once (see *First-run calibration*) and it stays put after that.
+- The menu-bar icon is in colour, not a monochrome template icon.
 
 ## Building an installer
 
@@ -55,6 +71,23 @@ is left alone. The installer is not code-signed, so SmartScreen may warn on firs
   brings up the first one's journal window.
 - The icons in `build\` are drawn by `scripts/make-icons.js` from the same code as the tray icon
   (`src/main/icon.js`); `npm run dist` regenerates them.
+
+## Building a Mac app
+
+On a Mac:
+
+```bash
+npm run dist:mac
+```
+
+This writes `dist/MTGA Journal-<version>-<arch>.dmg` for the Mac you build on (`arm64` for Apple
+Silicon, `x64` for Intel). Open it and drag **MTGA Journal** into Applications. The app is
+ad-hoc signed, not notarized, so the first launch is blocked. Open **System Settings → Privacy &
+Security**, scroll down to the message about MTGA Journal and click **Open Anyway**, or right-click
+the app and choose **Open**. Your journal in `~/Documents/MTGA Journal` is kept if you delete the app.
+
+Build on the kind of Mac you'll run it on: `npm install` only downloads the native helper
+(`koffi`) for the current CPU.
 
 ## First-run calibration
 
@@ -91,7 +124,7 @@ the game actually went.
 
 ## Your data
 
-The journal is plain JSON at `Documents\MTGA Journal\journal.json`. Before the first change in
+The journal is plain JSON at `Documents\MTGA Journal\journal.json` (`~/Documents/MTGA Journal/journal.json` on a Mac). Before the first change in
 each session the previous version is copied to `journal.json.bak`, and **Settings → Export
 Markdown** writes a readable `journal.md`. On startup the app also imports games from the current
 and previous MTGA logs, so recent games show up even if the app was not running when you played
