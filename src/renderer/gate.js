@@ -180,7 +180,7 @@ function renderPrep(state) {
     details.takeaway ? h('div', { class: 'callout' }, h('span', { class: 'label' }, 'Your takeaway from review'), h('div', {}, details.takeaway)) : null,
     details.main ? h('details', { class: 'fold deck', open: true }, h('summary', {}, h('span', { class: 'label' }, 'Your deck')), cardList(details.main)) : null,
     h('div', { class: 'prep-fields' }, fields),
-    h('div', { class: 'editor-foot' }, h('span', { class: 'faint hint' }, 'Ctrl+Enter to save'), error, h('span', { class: 'spacer' }), save),
+    h('div', { class: 'editor-foot' }, h('span', { class: 'faint hint' }, UI.SAVE_HINT), error, h('span', { class: 'spacer' }), save),
   );
   update();
   root.scrollTop = 0;

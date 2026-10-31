@@ -43,7 +43,8 @@ function paintIcon(size, { badge = false } = {}, put) {
   }
 }
 
-function makeIcon(size = 32, opts = {}) {
+// scaleFactor 2 makes a size-px bitmap draw at size/2 points (macOS Retina menu bar).
+function makeIcon(size = 32, opts = {}, scaleFactor = 1) {
   // Required here so scripts/make-icons.js can load this file under plain Node.
   const { nativeImage } = require('electron');
   const buf = Buffer.alloc(size * size * 4);
@@ -54,7 +55,7 @@ function makeIcon(size = 32, opts = {}) {
     buf[i + 2] = Math.round(color[0] * alpha);
     buf[i + 3] = Math.round(alpha * 255);
   });
-  return nativeImage.createFromBitmap(buf, { width: size, height: size });
+  return nativeImage.createFromBitmap(buf, { width: size, height: size, scaleFactor });
 }
 
 module.exports = { paintIcon, makeIcon };

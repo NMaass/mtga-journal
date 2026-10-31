@@ -1,7 +1,7 @@
 {
   "name": "mtga-journal",
   "version": "0.1.0",
-  "description": "Overlay for MTG Arena that locks the Play button until you journal your last game",
+  "description": "Overlay for MTG Arena (Windows and macOS) that locks the Play button until you journal your last game",
   "productName": "MTGA Journal",
   "main": "src/main/main.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "test": "node --test test/*.test.js",
     "e2e": "node scripts/e2e.js",
     "replay": "node scripts/replay.js",
-    "dist": "node scripts/make-icons.js && electron-builder --win"
+    "dist": "node scripts/make-icons.js && electron-builder --win",
+    "dist:mac": "node scripts/make-icons.js && electron-builder --mac"
   },
   "license": "MIT",
   "devDependencies": {
@@ -50,6 +51,21 @@
       "createStartMenuShortcut": true,
       "createDesktopShortcut": true,
       "shortcutName": "MTGA Journal"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.games",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "extendInfo": {
+        "LSMultipleInstancesProhibited": true
+      }
+    },
+    "dmg": {
+      "artifactName": "MTGA Journal-${version}-${arch}.dmg"
     }
   }
 }

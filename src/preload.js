@@ -1,6 +1,10 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+// Lets stylesheets adapt to the platform, e.g. room for the macOS traffic lights.
+window.addEventListener('DOMContentLoaded', () => document.documentElement.classList.add(`platform-${process.platform}`));
+
 contextBridge.exposeInMainWorld('mj', {
+  platform: process.platform,
   getState: () => ipcRenderer.invoke('state:get'),
   saveGame: (id, patch) => ipcRenderer.invoke('game:save', id, patch),
   saveRun: (id, patch) => ipcRenderer.invoke('run:save', id, patch),

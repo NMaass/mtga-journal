@@ -32,6 +32,7 @@ const NOTEPAD_PILL = { width: 210, height: 44 };
 
 app.setName('MTGA Journal');
 // Matches build.appId in package.json, which the installer puts on the Start-menu shortcut.
+const IS_MAC = process.platform === 'darwin';
 if (process.platform === 'win32') app.setAppUserModelId('com.mtgajournal.app');
 // Screenshots of windows hidden behind others would otherwise show their last painted frame.
 if (CAPTURE_DIR) app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion');
@@ -64,6 +65,8 @@ if (!CAPTURE_DIR && !app.requestSingleInstanceLock()) {
   app.quit();
 } else {
   app.on('second-instance', () => showJournal());
+  // macOS: clicking the Dock icon brings the journal back.
+  app.on('activate', () => journalWin && showJournal());
   app.whenReady().then(start);
 }
 
@@ -86,6 +89,7 @@ function logPath() {
 }
 
 function start() {
+  if (IS_MAC && !app.isPackaged) app.dock?.setIcon(makeIcon(512));
   const dir = dataDir();
   settings = new Settings(dir);
   journal = new Journal(dir);
@@ -409,6 +413,11 @@ function placeNotepad(mtga, visible, active) {
 
 // ---- windows ----------------------------------------------------------------------------
 
+// macOS puts a full-screen app in its own Space; overlays have to opt in to showing there.
+function showOverFullScreen(win) {
+  if (IS_MAC) win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+}
+
 const webPreferences = { preload: PRELOAD, contextIsolation: true, nodeIntegration: false, sandbox: true };
 
 function createBlockerWindow() {
@@ -430,6 +439,7 @@ function createBlockerWindow() {
     webPreferences,
   });
   blockerWin.setAlwaysOnTop(true, 'screen-saver');
+  showOverFullScreen(blockerWin);
   blockerWin.loadFile(path.join(RENDERER, 'blocker.html'));
 }
 
@@ -446,6 +456,7 @@ function createGateWindow() {
     icon: makeIcon(64),
     webPreferences,
   });
+  showOverFullScreen(gateWin);
   gateWin.loadFile(path.join(RENDERER, 'gate.html'));
   gateWin.on('close', (e) => {
     if (quitting) return;
@@ -475,6 +486,7 @@ function createNotepadWindow() {
     webPreferences,
   });
   notepadWin.setAlwaysOnTop(true, 'screen-saver');
+  showOverFullScreen(notepadWin);
   notepadWin.loadFile(path.join(RENDERER, 'notepad.html'));
   notepadWin.on('focus', refreshOverlay);
   notepadWin.on('blur', refreshOverlay);
@@ -515,7 +527,11 @@ function createJournalWindow() {
     title: 'MTGA Journal',
     icon: makeIcon(64),
     titleBarStyle: 'hidden',
-    titleBarOverlay: { color: '#0e1015', symbolColor: '#aab1c2', height: 44 },
+    // Windows draws its caption buttons on the right; macOS keeps its traffic lights on the
+    // left, centred in the 44px title bar.
+    ...(IS_MAC
+      ? { trafficLightPosition: { x: 16, y: 15 } }
+      : { titleBarOverlay: { color: '#0e1015', symbolColor: '#aab1c2', height: 44 } }),
     webPreferences,
   });
   journalWin.loadFile(path.join(RENDERER, 'journal.html'));
@@ -578,6 +594,7 @@ function startCalibration() {
     webPreferences,
   });
   calibrateWin.setAlwaysOnTop(true, 'screen-saver');
+  showOverFullScreen(calibrateWin);
   calibrateWin.loadFile(path.join(RENDERER, 'calibrate.html'));
   calibrateWin.once('ready-to-show', () => {
     calibrateWin.show();
@@ -600,8 +617,13 @@ function broadcast() {
 
 const GATE_LABELS = { postgame: 'Write game notes', prep: 'Write deck prep', review: 'Review a past note' };
 
+// The macOS menu bar wants a 16pt icon; a 32px bitmap at 2x stays sharp on Retina.
+function trayIcon(badge) {
+  return makeIcon(32, { badge }, IS_MAC ? 2 : 1);
+}
+
 function createTray() {
-  tray = new Tray(makeIcon(32));
+  tray = new Tray(trayIcon(false));
   tray.on('click', () => (gateList().length ? showGate() : showJournal()));
   updateTray([]);
 }
@@ -612,7 +634,7 @@ function updateTray(gates) {
   if (tray.key === key) return;
   tray.key = key;
   const first = gates[0];
-  tray.setImage(makeIcon(32, { badge: gates.length > 0 }));
+  tray.setImage(trayIcon(gates.length > 0));
   tray.setToolTip(first ? `MTGA Journal — ${GATE_LABELS[first.kind].toLowerCase()} to unlock Play` : 'MTGA Journal');
   tray.setContextMenu(
     Menu.buildFromTemplate([
@@ -658,7 +680,8 @@ function status() {
     cardNames: cardDb.available,
     paused: ui.paused,
     journalFile: journal.file,
-    launchAtLogin: process.platform === 'win32' ? app.getLoginItemSettings().openAtLogin : false,
+    launchAtLogin: process.platform === 'win32' || IS_MAC ? app.getLoginItemSettings().openAtLogin : false,
+    platform: process.platform,
   };
 }
 

@@ -1,4 +1,5 @@
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 
 let DatabaseSync = null;
@@ -13,20 +14,34 @@ const COLOR_ORDER = ['W', 'U', 'B', 'R', 'G'];
 const LAND_TYPE = '5';
 const CREATURE_TYPE = '2';
 const CLOSE_AFTER_MS = 3000;
-const INSTALL_CANDIDATES = [
-  'C:/Program Files/Wizards of the Coast/MTGA',
-  'C:/Program Files (x86)/Wizards of the Coast/MTGA',
-  'C:/Program Files (x86)/Steam/steamapps/common/MTGA',
-  'C:/Program Files/Epic Games/MagicTheGathering',
-];
 
-function installDirFromLog(logPath) {
+// Folders holding MTGA's downloaded data (the one with Downloads/Raw inside).
+const WINDOWS_DATA_DIRS = [
+  'C:/Program Files/Wizards of the Coast/MTGA/MTGA_Data',
+  'C:/Program Files (x86)/Wizards of the Coast/MTGA/MTGA_Data',
+  'C:/Program Files (x86)/Steam/steamapps/common/MTGA/MTGA_Data',
+  'C:/Program Files/Epic Games/MagicTheGathering/MTGA_Data',
+];
+// On macOS MTGA downloads its card data into Application Support; older installs kept it
+// inside the app bundle.
+const MAC_DATA_DIRS = [
+  path.join(os.homedir(), 'Library/Application Support/com.wizards.mtga'),
+  '/Applications/MTGA.app/Contents/Resources/Data',
+  path.join(os.homedir(), 'Applications/MTGA.app/Contents/Resources/Data'),
+  path.join(os.homedir(), 'Library/Application Support/Steam/steamapps/common/MTGA/MTGA.app/Contents/Resources/Data'),
+  '/Users/Shared/Epic Games/MagicTheGathering/MTGA.app/Contents/Resources/Data',
+];
+const DATA_DIR_CANDIDATES = process.platform === 'darwin' ? MAC_DATA_DIRS : WINDOWS_DATA_DIRS;
+
+// The log names the managed-code folder, which sits inside the data folder:
+//   Windows: C:/.../MTGA/MTGA_Data/Managed    macOS: /Applications/MTGA.app/Contents/Resources/Data/Managed
+function dataDirFromLog(logPath) {
   try {
     const fd = fs.openSync(logPath, 'r');
     const buf = Buffer.alloc(16384);
     const n = fs.readSync(fd, buf, 0, buf.length, 0);
     fs.closeSync(fd);
-    const m = /Mono path\[0\] = '(.+?)[\\/]MTGA_Data[\\/]Managed'/.exec(buf.toString('utf8', 0, n));
+    const m = /Mono path\[0\] = '(.+?)[\\/]Managed'/.exec(buf.toString('utf8', 0, n));
     return m ? m[1] : null;
   } catch {
     return null;
@@ -34,9 +49,9 @@ function installDirFromLog(logPath) {
 }
 
 function findCardDatabase(logPath) {
-  const dirs = [installDirFromLog(logPath), ...INSTALL_CANDIDATES].filter(Boolean);
+  const dirs = [dataDirFromLog(logPath), ...DATA_DIR_CANDIDATES].filter(Boolean);
   for (const dir of dirs) {
-    const raw = path.join(dir, 'MTGA_Data', 'Downloads', 'Raw');
+    const raw = path.join(dir, 'Downloads', 'Raw');
     let files;
     try {
       files = fs.readdirSync(raw).filter((f) => /^Raw_CardDatabase_.*\.mtga$/.test(f));

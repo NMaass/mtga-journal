@@ -2,7 +2,10 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const DEFAULT_LOG = path.join(os.homedir(), 'AppData', 'LocalLow', 'Wizards Of The Coast', 'MTGA', 'Player.log');
+const DEFAULT_LOG =
+  process.platform === 'darwin'
+    ? path.join(os.homedir(), 'Library', 'Logs', 'Wizards Of The Coast', 'MTGA', 'Player.log')
+    : path.join(os.homedir(), 'AppData', 'LocalLow', 'Wizards Of The Coast', 'MTGA', 'Player.log');
 
 // Areas are fractions of MTGA's client area so they survive window resizes.
 const DEFAULT_LOCK_AREA = { x: 0.8, y: 0.86, w: 0.195, h: 0.13 };
